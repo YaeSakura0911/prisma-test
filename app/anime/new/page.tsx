@@ -1,60 +1,91 @@
 'use client';
 
-import { useEffect, useActionState } from 'react';
-import { useForm } from '@tanstack/react-form';
-import { formOptions } from '@tanstack/react-form-nextjs';
-import { createAnime } from './action';
-import { CreateAnimeSchema } from '@/types/create-anime-schema';
-
-const formOpts = formOptions({
-    defaultValues: {
-        animeName: '',
-        episodeName: '',
-        seasonNumber: '1',
-        episodeNumber: '1',
-        airDate: '',
-        overview: '',
-    },
-    validators: {
-        onChange: CreateAnimeSchema,
-        onBlur: CreateAnimeSchema,
-        onSubmit: CreateAnimeSchema,
-    },
-});
+import { useActionState } from 'react';
+import {
+    useForm,
+    initialFormState,
+    useTransform,
+    mergeForm,
+    useSelector,
+} from '@tanstack/react-form-nextjs';
+import { createAnimeAction } from './action';
+import { createAnimeFormOptions } from '@/types/create-anime-schema';
 
 export default function NewAnime() {
-    const form = useForm({ ...formOpts });
-
-    const [state, formAction, pending] = useActionState(
-        createAnime,
-        initialState,
+    const [state, action, isPending] = useActionState(
+        createAnimeAction,
+        initialFormState,
     );
-
-    useEffect(() => {
-        // 成功跳转到动画页，失败则弹出 toast 提示框
-    }, [state]);
+    const form = useForm({
+        ...createAnimeFormOptions,
+        transform: useTransform(
+            (baseForm) => mergeForm(baseForm, state!),
+            [state],
+        ),
+    });
+    const formErrors = useSelector(form.store, (formState) => formState.errors);
 
     return (
         <div>
-            <form action={formAction} onSubmit={() => form.handleSubmit()}>
+            <form
+                action={action as never}
+                onSubmit={() => form.handleSubmit()}
+                className='flex flex-col'>
+                {/* ========== Anime Info ========== */}
                 {/* Anime Name */}
                 <form.Field name='animeName'>
                     {(field) => {
                         return (
                             <>
                                 <label htmlFor={field.name}>Anime Name</label>
-                                <input id={field.name} />
+                                <input
+                                    id={field.name}
+                                    name={field.name}
+                                    value={field.state.value}
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
+                                />
                             </>
                         );
                     }}
                 </form.Field>
+                {/* Anime Overview */}
+                <form.Field name='animeOverview'>
+                    {(field) => {
+                        return (
+                            <>
+                                <label htmlFor={field.name}>Overview</label>
+                                <textarea
+                                    id={field.name}
+                                    name={field.name}
+                                    value={field.state.value}
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
+                                />
+                            </>
+                        );
+                    }}
+                </form.Field>
+
+                <hr />
+
+                {/* ========== Episode Info ========== */}
                 {/* Episode Name */}
                 <form.Field name='episodeName'>
                     {(field) => {
                         return (
                             <>
                                 <label htmlFor={field.name}>Episode Name</label>
-                                <input id={field.name} />
+                                <input
+                                    id={field.name}
+                                    name={field.name}
+                                    value={field.state.value}
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
+                                />
                             </>
                         );
                     }}
@@ -67,7 +98,16 @@ export default function NewAnime() {
                                 <label htmlFor={field.name}>
                                     Season Number
                                 </label>
-                                <input id={field.name} type='number' min='1' />
+                                <input
+                                    id={field.name}
+                                    type='number'
+                                    name={field.name}
+                                    value={field.state.value}
+                                    min='1'
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
+                                />
                             </>
                         );
                     }}
@@ -80,7 +120,16 @@ export default function NewAnime() {
                                 <label htmlFor={field.name}>
                                     Episode Number
                                 </label>
-                                <input id={field.name} type='number' min='1' />
+                                <input
+                                    id={field.name}
+                                    type='number'
+                                    name={field.name}
+                                    value={field.state.value}
+                                    min='1'
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
+                                />
                             </>
                         );
                     }}
@@ -91,26 +140,49 @@ export default function NewAnime() {
                         return (
                             <>
                                 <label htmlFor={field.name}>Air Date</label>
-                                <input id={field.name} type='date' />
+                                <input
+                                    id={field.name}
+                                    type='date'
+                                    name={field.name}
+                                    value={field.state.value}
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
+                                />
                             </>
                         );
                     }}
                 </form.Field>
-                {/* Overview */}
-                <form.Field name='overview'>
+                {/* Episode Overview */}
+                <form.Field name='episodeOverview'>
                     {(field) => {
                         return (
                             <>
                                 <label htmlFor={field.name}>Overview</label>
-                                <textarea id={field.name} />
+                                <textarea
+                                    id={field.name}
+                                    name={field.name}
+                                    value={field.state.value}
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
+                                />
                             </>
                         );
                     }}
                 </form.Field>
 
-                <button type='submit' disabled={pending}>
-                    Create
-                </button>
+                <form.Subscribe
+                    selector={(formState) => [
+                        formState.canSubmit,
+                        formState.isSubmitting,
+                    ]}>
+                    {([canSubmit, isSubmitting]) => (
+                        <button type='submit' disabled={isPending}>
+                            {isPending ? 'loading...' : 'Create'}
+                        </button>
+                    )}
+                </form.Subscribe>
             </form>
         </div>
     );

@@ -1,35 +1,70 @@
 'use server';
 
 import prisma from '@/lib/prisma';
-import { CreateAnimeSchema } from '@/types/create-anime-schema';
-
 import {
     ServerValidateError,
     createServerValidate,
 } from '@tanstack/react-form-nextjs';
+import {
+    CreateAnimeIn,
+    CreateAnimeOut,
+    CreateAnimeSchema,
+    createAnimeFormOptions,
+} from '@/types/create-anime-schema';
 
 const serverValidate = createServerValidate({
-    onServerValidate: () => {},
+    ...createAnimeFormOptions,
+    onServerValidate: CreateAnimeSchema,
 });
 
-export async function createAnime(prev: unknown, formData: FormData) {
+export async function createAnimeAction(prev: unknown, formData: FormData) {
     try {
-        const validateData = await serverValidate(formData);
-        const parsed = CreateAnimeSchema.safeParse(validateData);
+        const validateData: CreateAnimeIn = await serverValidate(formData);
+        const parsedData: CreateAnimeOut =
+            CreateAnimeSchema.parse(validateData);
+        console.log(validateData);
 
         // 先判断动画是否存在
-
-        // 如果动画存在则跳转到动画页
+        const existingAnime = await prisma.anime.findUnique({
+            where: { name: parsedData.animeName },
+        });
+        if (existingAnime) {
+            console.log(existingAnime);
+            // TODO: 如果动画存在则跳转到动画页
+            return;
+        }
 
         // 如果动画不存在则启用事务，先创建动画，再创建剧集
-        await prisma.$transaction(async (tx) => {
-            await tx.anime.create();
+        const result = await prisma.$transaction(async (tx) => {
+            const anime = await tx.anime.create({
+                data: {
+                    name: parsedData.animeName,
+                    alias: {},
+                    overview: parsedData.animeOverview,
+                },
+            });
 
-            await tx.episode.create();
+            const episode = await tx.episode.create({
+                data: {
+                    name: parsedData.episodeName,
+                    alias: {},
+                    seasonNumber: parsedData.seasonNumber,
+                    episodeNumber: parsedData.episodeNumber,
+                    airDate: new Date(parsedData.airDate),
+                    overview: parsedData.episodeOverview,
+                    animeId: anime.id,
+                },
+            });
+
+            return { anime, episode };
         });
-    } catch (error) {
-        if (error instanceof ServerValidateError) {
-            return error.formState;
+
+        console.log(result);
+    } catch (e) {
+        if (e instanceof ServerValidateError) {
+            return e.formState;
         }
+
+        throw e;
     }
 }
