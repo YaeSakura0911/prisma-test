@@ -1,0 +1,18 @@
+model Episode {
+    id            Int @id @default(autoincrement())
+    animeId       Int
+    name          String @unique
+    alias         Json
+    seasonNumber  Int @db.SmallInt
+    episodeNumber Int @db.SmallInt
+    productCode   String? @unique
+    posterUrl     String?
+    coverUrl      String?
+    officialUrl   String?
+    previewUrls   String[]
+    duration      Int? @db.SmallInt
+    airDate       DateTime
+    overview      Json
+    createdAt     DateTime @default(now())
+    tags          TagOnEpisode[]
+}
