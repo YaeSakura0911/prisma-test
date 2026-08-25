@@ -1,189 +1,281 @@
-'use client';
+"use client";
 
-import { useActionState } from 'react';
+import { initialFormState, useForm } from "@tanstack/react-form-nextjs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
-    useForm,
-    initialFormState,
-    useTransform,
-    mergeForm,
-    useSelector,
-} from '@tanstack/react-form-nextjs';
-import { createAnimeAction } from './action';
-import { createAnimeFormOptions } from '@/types/create-anime-schema';
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+    FieldSet
+} from "@/components/ui/field";
+import { CreateAnimeSchema, createAnimeFormOptions } from "@/types/create-anime-schema";
+import createAnimeAction from "./action";
+import { useActionState } from "react";
 
 export default function NewAnime() {
-    const [state, action, isPending] = useActionState(
-        createAnimeAction,
-        initialFormState,
-    );
+    const [state, action] = useActionState(createAnimeAction, initialFormState);
+
     const form = useForm({
         ...createAnimeFormOptions,
-        transform: useTransform(
-            (baseForm) => mergeForm(baseForm, state!),
-            [state],
-        ),
+        
     });
-    const formErrors = useSelector(form.store, (formState) => formState.errors);
 
     return (
         <div>
             <form
-                action={action as never}
-                onSubmit={() => form.handleSubmit()}
-                className='flex flex-col'>
-                {/* ========== Anime Info ========== */}
-                {/* Anime Name */}
-                <form.Field name='animeName'>
-                    {(field) => {
-                        return (
-                            <>
-                                <label htmlFor={field.name}>Anime Name</label>
-                                <input
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onChange={(e) =>
-                                        field.handleChange(e.target.value)
-                                    }
-                                />
-                            </>
-                        );
-                    }}
-                </form.Field>
-                {/* Anime Overview */}
-                <form.Field name='animeOverview'>
-                    {(field) => {
-                        return (
-                            <>
-                                <label htmlFor={field.name}>Overview</label>
-                                <textarea
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onChange={(e) =>
-                                        field.handleChange(e.target.value)
-                                    }
-                                />
-                            </>
-                        );
-                    }}
-                </form.Field>
+                id="bug-report-form"
+                action={action}
+                onSubmit={() => {
+                    
+                    form.handleSubmit();
+                }}
+            >
+                <FieldSet>
+                    <FieldGroup>
+                        <form.Field name="animeName">
+                            {(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched &&
+                                    !field.state.meta.isValid;
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>
+                                            Anime Name
+                                        </FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value,
+                                                )
+                                            }
+                                            aria-invalid={isInvalid}
+                                            autoComplete="off"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError
+                                                errors={field.state.meta.errors}
+                                            />
+                                        )}
+                                    </Field>
+                                );
+                            }}
+                        </form.Field>
 
-                <hr />
+                        {/* Anime Overview Textarea */}
+                        <form.Field name="animeOverview">
+                            {(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched &&
+                                    !field.state.meta.isValid;
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>
+                                            Anime Overview
+                                        </FieldLabel>
+                                        <Textarea
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value,
+                                                )
+                                            }
+                                            aria-invalid={isInvalid}
+                                        />
+                                        {isInvalid && (
+                                            <FieldError
+                                                errors={field.state.meta.errors}
+                                            />
+                                        )}
+                                    </Field>
+                                );
+                            }}
+                        </form.Field>
+                        <form.Field name="episodeName">
+                            {(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched &&
+                                    !field.state.meta.isValid;
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>
+                                            Episode Name
+                                        </FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value,
+                                                )
+                                            }
+                                            aria-invalid={isInvalid}
+                                            autoComplete="off"
+                                        />
+                                        {isInvalid && (
+                                            <FieldError
+                                                errors={field.state.meta.errors}
+                                            />
+                                        )}
+                                    </Field>
+                                );
+                            }}
+                        </form.Field>
 
-                {/* ========== Episode Info ========== */}
-                {/* Episode Name */}
-                <form.Field name='episodeName'>
-                    {(field) => {
-                        return (
-                            <>
-                                <label htmlFor={field.name}>Episode Name</label>
-                                <input
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onChange={(e) =>
-                                        field.handleChange(e.target.value)
-                                    }
-                                />
-                            </>
-                        );
-                    }}
-                </form.Field>
-                {/* Season Number */}
-                <form.Field name='seasonNumber'>
-                    {(field) => {
-                        return (
-                            <>
-                                <label htmlFor={field.name}>
-                                    Season Number
-                                </label>
-                                <input
-                                    id={field.name}
-                                    type='number'
-                                    name={field.name}
-                                    value={field.state.value}
-                                    min='1'
-                                    onChange={(e) =>
-                                        field.handleChange(e.target.value)
-                                    }
-                                />
-                            </>
-                        );
-                    }}
-                </form.Field>
-                {/* Episode Number */}
-                <form.Field name='episodeNumber'>
-                    {(field) => {
-                        return (
-                            <>
-                                <label htmlFor={field.name}>
-                                    Episode Number
-                                </label>
-                                <input
-                                    id={field.name}
-                                    type='number'
-                                    name={field.name}
-                                    value={field.state.value}
-                                    min='1'
-                                    onChange={(e) =>
-                                        field.handleChange(e.target.value)
-                                    }
-                                />
-                            </>
-                        );
-                    }}
-                </form.Field>
-                {/* Air Date */}
-                <form.Field name='airDate'>
-                    {(field) => {
-                        return (
-                            <>
-                                <label htmlFor={field.name}>Air Date</label>
-                                <input
-                                    id={field.name}
-                                    type='date'
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onChange={(e) =>
-                                        field.handleChange(e.target.value)
-                                    }
-                                />
-                            </>
-                        );
-                    }}
-                </form.Field>
-                {/* Episode Overview */}
-                <form.Field name='episodeOverview'>
-                    {(field) => {
-                        return (
-                            <>
-                                <label htmlFor={field.name}>Overview</label>
-                                <textarea
-                                    id={field.name}
-                                    name={field.name}
-                                    value={field.state.value}
-                                    onChange={(e) =>
-                                        field.handleChange(e.target.value)
-                                    }
-                                />
-                            </>
-                        );
-                    }}
-                </form.Field>
+                        {/* Season Number Input */}
+                        <form.Field name="seasonNumber">
+                            {(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched &&
+                                    !field.state.meta.isValid;
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>
+                                            Episode Name
+                                        </FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="number"
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value,
+                                                )
+                                            }
+                                            aria-invalid={isInvalid}
+                                        />
+                                        {isInvalid && (
+                                            <FieldError
+                                                errors={field.state.meta.errors}
+                                            />
+                                        )}
+                                    </Field>
+                                );
+                            }}
+                        </form.Field>
 
-                <form.Subscribe
-                    selector={(formState) => [
-                        formState.canSubmit,
-                        formState.isSubmitting,
-                    ]}>
-                    {([canSubmit, isSubmitting]) => (
-                        <button type='submit' disabled={isPending}>
-                            {isPending ? 'loading...' : 'Create'}
-                        </button>
-                    )}
-                </form.Subscribe>
+                        {/* Episode Number Input */}
+                        <form.Field name="episodeNumber">
+                            {(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched &&
+                                    !field.state.meta.isValid;
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>
+                                            Episode Name
+                                        </FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="number"
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value,
+                                                )
+                                            }
+                                            aria-invalid={isInvalid}
+                                        />
+                                        {isInvalid && (
+                                            <FieldError
+                                                errors={field.state.meta.errors}
+                                            />
+                                        )}
+                                    </Field>
+                                );
+                            }}
+                        </form.Field>
+
+                        {/* Air Date Picker */}
+                        <form.Field name="airDate">
+                            {(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched &&
+                                    !field.state.meta.isValid;
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>
+                                            Air Date
+                                        </FieldLabel>
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="date"
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value,
+                                                )
+                                            }
+                                            aria-invalid={isInvalid}
+                                        />
+                                        {isInvalid && (
+                                            <FieldError
+                                                errors={field.state.meta.errors}
+                                            />
+                                        )}
+                                    </Field>
+                                );
+                            }}
+                        </form.Field>
+
+                        {/* Episode Overview Textarea */}
+                        <form.Field name="episodeOverview">
+                            {(field) => {
+                                const isInvalid =
+                                    field.state.meta.isTouched &&
+                                    !field.state.meta.isValid;
+                                return (
+                                    <Field data-invalid={isInvalid}>
+                                        <FieldLabel htmlFor={field.name}>
+                                            Episode Overview
+                                        </FieldLabel>
+                                        <Textarea
+                                            id={field.name}
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) =>
+                                                field.handleChange(
+                                                    e.target.value,
+                                                )
+                                            }
+                                            aria-invalid={isInvalid}
+                                        />
+                                        {isInvalid && (
+                                            <FieldError
+                                                errors={field.state.meta.errors}
+                                            />
+                                        )}
+                                    </Field>
+                                );
+                            }}
+                        </form.Field>
+                    </FieldGroup>
+                </FieldSet>
             </form>
+
+            <Field>
+                <Button type="submit" form="bug-report-form">
+                    Submit
+                </Button>
+            </Field>
         </div>
     );
 }

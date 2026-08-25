@@ -1,13 +1,13 @@
-import { z } from 'zod';
-import { formOptions } from '@tanstack/react-form-nextjs';
+import { z } from "zod";
+import { formOptions } from "@tanstack/react-form-nextjs";
 
 export const CreateAnimeSchema = z.object({
-    animeName: z.string(),
+    animeName: z.string().min(1, "Anime Name is Null!"),
     animeOverview: z.string(),
-    episodeName: z.string(),
-    seasonNumber: z.string().transform((val) => parseInt(val, 10)),
-    episodeNumber: z.string().transform((val) => parseInt(val, 10)),
-    airDate: z.string(),
+    episodeName: z.string().min(1, "Episode Name is Null!"),
+    seasonNumber: z.string().transform((val) => Number(val)),
+    episodeNumber: z.string().transform((val) => Number(val)),
+    airDate: z.iso.date().transform((val) => new Date(val)),
     episodeOverview: z.string(),
 });
 
@@ -16,17 +16,17 @@ export type CreateAnimeOut = z.output<typeof CreateAnimeSchema>;
 
 export const createAnimeFormOptions = formOptions({
     defaultValues: {
-        animeName: '',
-        animeOverview: '',
-        episodeName: '',
-        seasonNumber: '1',
-        episodeNumber: '1',
-        airDate: '',
-        episodeOverview: '',
+        animeName: "test",
+        animeOverview: "",
+        episodeName: "test",
+        seasonNumber: "1",
+        episodeNumber: "1",
+        airDate: "2026-08-25",
+        episodeOverview: "",
     },
     validators: {
-        onChange: CreateAnimeSchema,
-        onBlur: CreateAnimeSchema,
         onSubmit: CreateAnimeSchema,
+        onBlur: CreateAnimeSchema,
+        onChange: CreateAnimeSchema,
     },
 });
