@@ -1,9 +1,0 @@
-model Brand {
-    id          Int @id @default(autoincrement())
-    name        String @unique
-    alias       Json
-    logoUrl     String?
-    officialUrl String?
-    createdAt   DateTime @default(now())
-    animes      Anime[]
-}

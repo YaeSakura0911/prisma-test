@@ -30,3 +30,9 @@ export const createAnimeFormOptions = formOptions({
         onChange: CreateAnimeSchema,
     },
 });
+
+export type LocalizedText = {
+    zh: string;
+    en: string;
+    ja: string;
+};

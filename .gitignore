@@ -21,4 +21,8 @@
 next-env.d.ts
 
 # prisma
-/app/generated/prisma
+/prisma/contract.json
+/prisma/contract.d.ts
+node_modules/
+dist/
+.env

@@ -1,9 +1,0 @@
-model Anime {
-    id        Int @id @default(autoincrement())
-    brandId   Int?
-    name      String @unique
-    alias     Json
-    overview  String?
-    createdAt DateTime @default(now())
-    brand     Brand? @relation(fields: [brandId], references: [id])
-}

@@ -1,6 +1,11 @@
 "use client";
 
-import { initialFormState, useForm } from "@tanstack/react-form-nextjs";
+import {
+    initialFormState,
+    useForm,
+    useTransform,
+    mergeForm,
+} from "@tanstack/react-form-nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,30 +14,32 @@ import {
     FieldError,
     FieldGroup,
     FieldLabel,
-    FieldSet
+    FieldSet,
 } from "@/components/ui/field";
-import { CreateAnimeSchema, createAnimeFormOptions } from "@/types/create-anime-schema";
+import { createAnimeFormOptions } from "@/types/create-anime-schema";
 import createAnimeAction from "./action";
 import { useActionState } from "react";
 
 export default function NewAnime() {
-    const [state, action] = useActionState(createAnimeAction, initialFormState);
+    const [state, createAnime] = useActionState(
+        createAnimeAction,
+        initialFormState,
+    );
 
     const form = useForm({
         ...createAnimeFormOptions,
-        
+        transform: useTransform(
+            (baseForm) => {
+                if (!state?.values) return baseForm;
+                return mergeForm(baseForm, state);
+            },
+            [state],
+        ),
     });
 
     return (
         <div>
-            <form
-                id="bug-report-form"
-                action={action}
-                onSubmit={() => {
-                    
-                    form.handleSubmit();
-                }}
-            >
+            <form action={createAnime} onSubmit={() => form.handleSubmit()}>
                 <FieldSet>
                     <FieldGroup>
                         <form.Field name="animeName">
@@ -91,6 +98,7 @@ export default function NewAnime() {
                                             }
                                             aria-invalid={isInvalid}
                                         />
+
                                         {isInvalid && (
                                             <FieldError
                                                 errors={field.state.meta.errors}
@@ -123,6 +131,7 @@ export default function NewAnime() {
                                             aria-invalid={isInvalid}
                                             autoComplete="off"
                                         />
+
                                         {isInvalid && (
                                             <FieldError
                                                 errors={field.state.meta.errors}
@@ -157,6 +166,7 @@ export default function NewAnime() {
                                             }
                                             aria-invalid={isInvalid}
                                         />
+
                                         {isInvalid && (
                                             <FieldError
                                                 errors={field.state.meta.errors}
@@ -191,6 +201,7 @@ export default function NewAnime() {
                                             }
                                             aria-invalid={isInvalid}
                                         />
+
                                         {isInvalid && (
                                             <FieldError
                                                 errors={field.state.meta.errors}
@@ -225,6 +236,7 @@ export default function NewAnime() {
                                             }
                                             aria-invalid={isInvalid}
                                         />
+
                                         {isInvalid && (
                                             <FieldError
                                                 errors={field.state.meta.errors}
@@ -258,6 +270,7 @@ export default function NewAnime() {
                                             }
                                             aria-invalid={isInvalid}
                                         />
+
                                         {isInvalid && (
                                             <FieldError
                                                 errors={field.state.meta.errors}
@@ -267,15 +280,23 @@ export default function NewAnime() {
                                 );
                             }}
                         </form.Field>
+                        <form.Subscribe
+                            selector={(formState) => [
+                                formState.canSubmit,
+                                formState.isSubmitting,
+                            ]}
+                        >
+                            {([canSubmit, isSubmitting]) => (
+                                <Field>
+                                    <Button type="submit" disabled={!canSubmit}>
+                                        {isSubmitting ? "..." : "Submit"}
+                                    </Button>
+                                </Field>
+                            )}
+                        </form.Subscribe>
                     </FieldGroup>
                 </FieldSet>
             </form>
-
-            <Field>
-                <Button type="submit" form="bug-report-form">
-                    Submit
-                </Button>
-            </Field>
         </div>
     );
 }

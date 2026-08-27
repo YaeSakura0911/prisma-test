@@ -1,7 +1,0 @@
-model Tag {
-    id        Int @id @default(autoincrement())
-    name      String @unique
-    alias     Json
-    createdAt DateTime @default(now())
-    episodes  TagOnEpisode[]
-}
