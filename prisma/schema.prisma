@@ -1,0 +1,133 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+// 品牌表
+model Brand {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    officialUrl String?  @map("official_url")
+    logoUrl     String?  @map("logo_url")
+    createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+    anime       Anime[]
+
+    @@map("brand")
+}
+
+// 动画表
+model Anime {
+    id         Int              @id @default(autoincrement())
+    brandId    Int?             @map("brand_id")
+    name       String           @unique
+    overview   String
+    startDate  DateTime         @map("start_date") @db.Date
+    endDate    DateTime         @map("end_date") @db.Date
+    createdAt  DateTime         @default(now()) @map("created_at") @db.Timestamp(6)
+    brand      Brand?           @relation(fields: [brandId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    episodes   Episode[]
+    characters AnimeCharacter[]
+    staffs     AnimeStaff[]
+
+    @@map("anime")
+}
+
+// 剧集表
+model Episode {
+    id            Int          @id @default(autoincrement())
+    animeId       Int          @map("anime_id")
+    name          String       @unique
+    productCode   String?      @map("product_code")
+    airDate       DateTime     @map("air_date") @db.Date
+    coverUrl      String?      @map("cover_url")
+    episodeNumber Int          @map("episode_number") @db.SmallInt
+    seasonNumber  Int          @map("season_number") @db.SmallInt
+    officialUrl   String?      @map("official_url")
+    overview      String
+    posterUrl     String?      @map("poster_url")
+    previewUrls   String[]     @map("preview_urls")
+    duration      Int?         @db.SmallInt
+    createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamp(6)
+    anime         Anime        @relation(fields: [animeId], references: [id])
+    episodeTag    EpisodeTag[]
+
+    @@map("episode")
+}
+
+// 标签表
+model Tag {
+    id         Int          @id @default(autoincrement())
+    name       String
+    createdAt  DateTime     @default(now()) @db.Timestamp(6)
+    episodeTag EpisodeTag[]
+
+    @@map("tag")
+}
+
+model EpisodeTag {
+    episodeId Int     @map("episode_id")
+    tagId     Int     @map("tag_id")
+    episode   Episode @relation(fields: [episodeId], references: [id])
+    tag       Tag     @relation(fields: [tagId], references: [id])
+
+    @@id([episodeId, tagId])
+    @@map("episode_tag")
+}
+
+// 角色表
+model Character {
+    id              Int              @id @default(autoincrement())
+    name            String
+    createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamp(6)
+    animeCharacters AnimeCharacter[]
+
+    @@map("character")
+}
+
+// 动画角色关联表
+model AnimeCharacter {
+    animeId     Int
+    characterId Int
+    anime       Anime     @relation(fields: [animeId], references: [id])
+    character   Character @relation(fields: [characterId], references: [id])
+    person      Person?   @relation(fields: [personId], references: [id])
+    personId    Int?
+
+    @@id([animeId, characterId])
+    @@map("anime_character")
+}
+
+// 人物表
+model Person {
+    id         Int              @id @default(autoincrement())
+    name       String
+    createdAt  DateTime         @default(now()) @map("created_at") @db.Timestamp(6)
+    staffs     AnimeStaff[]
+    characters AnimeCharacter[]
+
+    @@map("person")
+}
+
+// 职位表
+model Position {
+    id          Int          @id @default(autoincrement())
+    name        String       @unique
+    createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamp(6)
+    animeStaffs AnimeStaff[]
+}
+
+// 动画职员关联表
+model AnimeStaff {
+    animeId    Int      @map("anime_id")
+    personId   Int      @map("person_id")
+    positionId Int      @map("position_id")
+    anime      Anime    @relation(fields: [animeId], references: [id])
+    person     Person   @relation(fields: [personId], references: [id])
+    position   Position @relation(fields: [positionId], references: [id])
+
+    @@id([animeId, personId])
+}

@@ -1,17 +1,6 @@
 allowBuilds:
   '@prisma/engines': true
   esbuild: true
-  msgpackr-extract: true
   prisma: true
   sharp: true
   unrs-resolver: true
-  workerd: true
-minimumReleaseAgeExclude:
-  - '@next/eslint-plugin-next@16.3.3'
-  - eslint-config-next@16.3.3
-  - '@prisma/cli-engine@0.3.0'
-  - '@prisma/composer-cli@0.16.0'
-  - '@prisma/composer@0.16.0'
-  - '@prisma/orm-framework@8.0.0-rc.8'
-  - '@prisma/orm-toolchain@8.0.0-rc.8'
-  - prisma@8.0.0-rc.12

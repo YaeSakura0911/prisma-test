@@ -3,18 +3,19 @@
 import {
     createAnimeFormOptions,
     CreateAnimeSchema,
-    type LocalizedText,
 } from "@/types/create-anime-schema";
 import {
     ServerValidateError,
     createServerValidate,
 } from "@tanstack/react-form-nextjs";
-import { db } from "@/prisma/db";
+import { prisma } from "@/lib/prisma";
 
 const serverValidate = createServerValidate({
     ...createAnimeFormOptions,
     onServerValidate: CreateAnimeSchema,
 });
+
+const locale = "ja";
 
 export default async function createAnimeAction(
     prev: unknown,
@@ -29,35 +30,39 @@ export default async function createAnimeAction(
         }
         const data = parsed.data;
 
-        await db.transaction(async (tx) => {
+        await prisma.$transaction(async (tx) => {
             // 先判断动画是否存在，如果存在则返回
-            const existingAnime = await tx.orm.public.Anime.where((anime) =>
-                anime.name.eq(data.animeName),
-            ).first();
-            if (existingAnime) return;
+            const existingAnime = await tx.anime.findUnique({
+                where: {
+                    name: data.animeName,
+                },
+            });
+            if (existingAnime) {
+                console.log("Anime Is Existing!");
+                return;
+            }
 
-            // 如果不存在则创建
-            const anime = await tx.orm.public.Anime.create({
-                name: data.animeName,
-                alias: {},
-                overview: data.animeOverview,
+            // 创建动画
+            const anime = await tx.anime.create({
+                data: {
+                    name: data.animeName,
+                    alias: { locale: data.animeName },
+                    overview: { locale: data.animeOverview },
+                },
             });
 
-            const overview: LocalizedText = {
-                zh: data.episodeOverview,
-                en: "",
-                ja: "",
-            };
-
-            await tx.orm.public.Episode.create({
-                animeId: anime.id,
-                name: data.episodeName,
-                alias: {},
-                seasonNumber: data.seasonNumber,
-                episodeNumber: data.episodeNumber,
-                airDate: data.airDate,
-                overview,
-                previewUrls: [],
+            // 创建剧集
+            await tx.episode.create({
+                data: {
+                    animeId: anime.id,
+                    name: data.episodeName,
+                    alias: { locale: data.episodeName },
+                    seasonNumber: data.seasonNumber,
+                    episodeNumber: data.episodeNumber,
+                    airDate: data.airDate,
+                    overview: { locale: data.episodeOverview },
+                    previewUrls: [],
+                },
             });
         });
     } catch (e) {

@@ -17,12 +17,12 @@ export type CreateAnimeOut = z.output<typeof CreateAnimeSchema>;
 export const createAnimeFormOptions = formOptions({
     defaultValues: {
         animeName: "test",
-        animeOverview: "",
+        animeOverview: "test",
         episodeName: "test",
         seasonNumber: "1",
         episodeNumber: "1",
         airDate: "2026-08-25",
-        episodeOverview: "",
+        episodeOverview: "test",
     },
     validators: {
         onSubmit: CreateAnimeSchema,
@@ -30,9 +30,3 @@ export const createAnimeFormOptions = formOptions({
         onChange: CreateAnimeSchema,
     },
 });
-
-export type LocalizedText = {
-    zh: string;
-    en: string;
-    ja: string;
-};

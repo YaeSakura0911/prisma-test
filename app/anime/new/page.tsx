@@ -42,6 +42,7 @@ export default function NewAnime() {
             <form action={createAnime} onSubmit={() => form.handleSubmit()}>
                 <FieldSet>
                     <FieldGroup>
+                        {/* Anime Name Input */}
                         <form.Field name="animeName">
                             {(field) => {
                                 const isInvalid =
@@ -63,7 +64,6 @@ export default function NewAnime() {
                                                 )
                                             }
                                             aria-invalid={isInvalid}
-                                            autoComplete="off"
                                         />
                                         {isInvalid && (
                                             <FieldError
@@ -129,7 +129,6 @@ export default function NewAnime() {
                                                 )
                                             }
                                             aria-invalid={isInvalid}
-                                            autoComplete="off"
                                         />
 
                                         {isInvalid && (
