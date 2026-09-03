@@ -1,0 +1,1377 @@
+{
+  "dialect": "postgres",
+  "id": "09ad8eec-c4f0-41a1-97a4-cdfb74a9d563",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "version": "8",
+  "ddl": [
+    {
+      "isRlsEnabled": false,
+      "name": "anime",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "anime_character",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "anime_staff",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "anime_translation",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "brand",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "character",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "episode",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "episode_tag",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "episode_translation",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "locale",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "person",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "position",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "tag",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "anime_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_staff"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "character"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tag"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "episode_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "anime_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_character"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "brand"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "episode_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode_tag"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "position"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "anime_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "type": "serial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "person"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "locale"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "character"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "original_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "brand"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "brand_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "locale_code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "anime_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "locale_code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tag"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "person"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "position"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tag_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode_tag"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "character_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_character"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "person_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_staff"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "position_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_staff"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "person"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "official_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "brand"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "position"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "original_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "translated_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "person_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_character"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tag"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "original_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "character"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "translated_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "translated_overview",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "product_code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "logo_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "brand"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "translated_overview",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "air_date",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "brand"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "season_number",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "episode_number",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "official_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "cover_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "poster_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 1,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "preview_urls",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "duration",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "translated_name"
+        },
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "translated_overview"
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "pgroonga",
+      "concurrently": false,
+      "name": "idx_anime_translation_all",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "locale_code"
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "idx_anime_translation_locale",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "translated_name"
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "tokenizer=TokenMecab",
+      "method": "pgroonga",
+      "concurrently": false,
+      "name": "idx_anime_translation_translated_name",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "translated_overview"
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "pgroonga",
+      "concurrently": false,
+      "name": "idx_anime_translation_translated_overview",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "translated_name"
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "tokenizer=TokenMecab",
+      "method": "pgroonga",
+      "concurrently": false,
+      "name": "idx_episode_translation_alias",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "translated_name"
+        },
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "translated_overview"
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "pgroonga",
+      "concurrently": false,
+      "name": "idx_episode_translation_all",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "locale_code"
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "idx_episode_translation_locale",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null,
+          "isExpression": false,
+          "value": "translated_overview"
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "pgroonga",
+      "concurrently": false,
+      "name": "idx_episode_translation_overview",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "brand_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "brand",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "anime_brand_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "anime_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "anime",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "anime_translation_anime_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "locale_code"
+      ],
+      "schemaTo": "public",
+      "tableTo": "locale",
+      "columnsTo": [
+        "code"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "NO ACTION",
+      "name": "anime_translation_locale_code_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "anime_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "anime",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "episode_anime_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "episode_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "episode",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "episode_translation_episode_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "locale_code"
+      ],
+      "schemaTo": "public",
+      "tableTo": "locale",
+      "columnsTo": [
+        "code"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "episode_translation_locale_code_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "episode_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "episode",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "episode_tag_episode_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "episode_tag"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "tag_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "tag",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "episode_tag_tag_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "episode_tag"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "anime_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "anime",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "anime_character_anime_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime_character"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "character_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "character",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "anime_character_character_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime_character"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "person_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "person",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "anime_character_person_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime_character"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "anime_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "anime",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "anime_staff_anime_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime_staff"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "person_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "person",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "anime_staff_person_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime_staff"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "position_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "position",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "anime_staff_position_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "anime_staff"
+    },
+    {
+      "columns": [
+        "code"
+      ],
+      "nameExplicit": true,
+      "name": "locale_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "locale"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": true,
+      "name": "brand_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "brand"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": true,
+      "name": "anime_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "anime"
+    },
+    {
+      "columns": [
+        "anime_id",
+        "locale_code"
+      ],
+      "nameExplicit": true,
+      "name": "anime_translation_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "anime_translation"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": true,
+      "name": "episode_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "columns": [
+        "episode_id",
+        "locale_code"
+      ],
+      "nameExplicit": true,
+      "name": "episode_translation_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "episode_translation"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": true,
+      "name": "tag_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "tag"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": true,
+      "name": "character_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "character"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": true,
+      "name": "person_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "person"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": true,
+      "name": "position_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "position"
+    },
+    {
+      "columns": [
+        "episode_id",
+        "tag_id"
+      ],
+      "nameExplicit": true,
+      "name": "episode_tag_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "episode_tag"
+    },
+    {
+      "columns": [
+        "anime_id",
+        "character_id",
+        "person_id"
+      ],
+      "nameExplicit": true,
+      "name": "anime_character_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "anime_character"
+    },
+    {
+      "columns": [
+        "anime_id",
+        "person_id",
+        "position_id"
+      ],
+      "nameExplicit": true,
+      "name": "anime_staff_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "anime_staff"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "original_name"
+      ],
+      "nullsNotDistinct": false,
+      "name": "brand_original_name_key",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "brand"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "original_name"
+      ],
+      "nullsNotDistinct": false,
+      "name": "anime_original_name_key",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "anime"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "anime_id",
+        "season_number",
+        "episode_number"
+      ],
+      "nullsNotDistinct": false,
+      "name": "episode_anime_id_season_number_episode_number_key",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "product_code"
+      ],
+      "nullsNotDistinct": false,
+      "name": "episode_product_code_key",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "episode"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "name"
+      ],
+      "nullsNotDistinct": false,
+      "name": "tag_name_key",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "tag"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "name"
+      ],
+      "nullsNotDistinct": false,
+      "name": "position_name_key",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "position"
+    }
+  ],
+  "renames": []
+}

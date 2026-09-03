@@ -1,154 +1,243 @@
-/*
-==================================================
-品牌 (Brands) 表
-==================================================
-*/
-DROP TABLE IF EXISTS brands CASCADE;
-CREATE TABLE brands (
-    id SERIAL PRIMARY KEY,                                         -- 品牌ID
-    names JSONB NOT NULL,                                          -- 品牌名称 (如: {"ja":"ピンクパイナップル", "en":"Pink Pineapple"})
-    logo_url VARCHAR(255),                                         -- 品牌Logo URL
-    website_url VARCHAR(255),                                      -- 公司官网 URL
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP  -- 创建时间
-);
--- CREATE INDEX idx_brands_names_gin ON brands USING gin (names);     -- 为品牌名称创建 GIN 索引，方便按名称检索
+-- 启用 PGroonga 扩展
+CREATE EXTENSION IF NOT EXISTS pgroonga;
 
-/*
-==================================================
-标签 (Tags) 表
-==================================================
-*/
-DROP TABLE IF EXISTS tags CASCADE;
-CREATE TABLE tags (
-    id SERIAL PRIMARY KEY,            -- 标签ID
-    name VARCHAR(100) UNIQUE NOT NULL -- 标签名称 (如: '3D', 'NTR', '异世界')
+/* ==============================
+            语言字典表
+============================== */
+CREATE TABLE locale (
+  code TEXT PRIMARY KEY
 );
 
-/*
-==================================================
-里番 (animes) 表
-==================================================
-*/
-DROP TABLE IF EXISTS hanimes CASCADE;
-CREATE TABLE animes (
-    id SERIAL PRIMARY KEY,                                         -- 里番ID
-    brand_id INT REFERENCES brands(id) ON DELETE SET NULL,         -- 品牌方ID
-    titles JSONB NOT NULL,                                         -- 里番名称 (如：{"ja":"聖徒会長ヒカル", "en":"Seitokaichou Hikaru"})
-    description TEXT,                                              -- 里番简介
-    air_date DATE,                                                 -- 发售日期 (如：2026-06)
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP  -- 创建时间
-);
--- CREATE INDEX idx_hanimes_titles_gin ON animes USING gin (titles); -- 为里番名称创建 GIN 索引，方便按名称检索
--- CREATE INDEX idx_hanimes_brand_id ON animes (brand_id);           -- 为品牌ID创建索引，方便按品牌检索
+-- 插入常用 ISO 639-1 语言代码
+INSERT INTO locale (code) VALUES ('ja'), ('zh'), ('en');
 
-/*
-==================================================
-剧集 (Episodes) 表
-==================================================
-*/
-DROP TABLE IF EXISTS episodes CASCADE;
-CREATE TABLE episodes (
-    id SERIAL PRIMARY KEY,                                   -- 剧集ID
-    hanime_id INT REFERENCES hanimes(id) ON DELETE CASCADE,  -- 里番ID
-    product_code VARCHAR(100) UNIQUE,                        -- 番号 (如：ACJDP-0084)
-    season_number INT DEFAULT 1,                             -- 季号
-    episode_number INT NOT NULL,                             -- 集号
-    title VARCHAR(255),
-    cover_url VARCHAR(255),                                  -- 封面URL
-    poster_url VARCHAR(255),                                 -- 海报URL
-    preview_urls TEXT[],                                     -- 预览图URL列表 (如：['img1.jpg', 'img2.jpg'])
-    duration INT,                                            -- 播放时间 (单位：min)
-    air_date DATE,                                           -- 发售日期 (如：2026-06-15)
-    UNIQUE (hanime_id, season_number, episode_number)        -- 
-);
--- CREATE INDEX idx_episodes_hanime_id ON episodes (hanime_id); -- 为里番ID创建索引，方便按里番检索
+-- 插入注释
+COMMENT ON COLUMN locale.code IS 'ISO 639-1 语言代码';
 
-/*
-==================================================
-制作人员 (Staff) 表
-==================================================
-*/
-DROP TABLE IF EXISTS staff CASCADE;
-CREATE TABLE staff (
-    id SERIAL PRIMARY KEY,      -- 制作人员ID
-    name VARCHAR(255) NOT NULL -- 制作人员名称
+/* ==============================
+            品牌表
+============================== */
+CREATE TABLE brand (
+  id            SERIAL PRIMARY KEY,
+  original_name TEXT NOT NULL UNIQUE,
+  official_url  TEXT,
+  logo_url      TEXT,
+  created_at    TIMESTAMP DEFAULT now()
 );
 
-/*
-==================================================
-职位（Positions）表
-==================================================
-*/
-DROP TABLE IF EXISTS positions CASCADE;
-CREATE TABLE positions (
-    id SERIAL PRIMARY KEY,                                           -- 职位ID
-    names JSONB NOT NULL                                             -- 职位名称 (如: {"ja":"監督", "en":"Director"})
-);
--- CREATE INDEX idx_positions_names_gin ON positions USING gin (names); -- 为职位名称创建 GIN 索引，方便按名称检索
+COMMENT ON COLUMN brand.id IS '品牌ID';
+COMMENT ON COLUMN brand.original_name IS '品牌名称';
+COMMENT ON COLUMN brand.official_url IS '官方网址';
+COMMENT ON COLUMN brand.logo_url IS 'Logo网址';
+COMMENT ON COLUMN brand.created_at IS '创建时间';
 
-/*
-==================================================
-演员 (Actors) 表
-==================================================
-*/
-DROP TABLE IF EXISTS actors CASCADE;
-CREATE TABLE actors (
-    id SERIAL PRIMARY KEY,       -- 演员ID
-    name VARCHAR(255) NOT NULL  -- 演员名称
+/* ==============================
+            动画表
+============================== */
+CREATE TABLE anime (
+  id            SERIAL PRIMARY KEY,
+  brand_id      INT REFERENCES brand(id),
+  original_name TEXT UNIQUE NOT NULL,
+  created_at    TIMESTAMP NOT NULL DEFAULT now()
 );
 
-/*
-==================================================
--- 角色 (Characters) 表
-==================================================
-*/
-DROP TABLE IF EXISTS characters CASCADE;
-CREATE TABLE characters (
-    id SERIAL PRIMARY KEY,      -- 角色ID
-    name VARCHAR(255) NOT NULL -- 角色名称
+-- 插入注释
+COMMENT ON COLUMN anime.id IS '动画ID';
+COMMENT ON COLUMN anime.brand_id IS '品牌ID';
+COMMENT ON COLUMN anime.original_name IS '原始动画名称';
+COMMENT ON COLUMN anime.created_at IS '创建时间';
+
+/* ==============================
+            动画翻译表
+============================== */
+CREATE TABLE anime_translation (
+  anime_id    INT NOT NULL REFERENCES anime(id),
+  locale_code TEXT NOT NULL REFERENCES locale(code) ON UPDATE CASCADE,
+  translated_name       TEXT,
+  translated_overview    TEXT,
+  PRIMARY KEY (anime_id, locale_code)
 );
 
-/*
-==================================================
-里番-标签 (hanime_tags) 关联表
-==================================================
-*/
-DROP TABLE IF EXISTS hanime_tags CASCADE;
-CREATE TABLE hanime_tags (
-    hanime_id INT REFERENCES hanimes(id) ON DELETE CASCADE,  -- 里番ID
-    tag_id INT REFERENCES tags(id) ON DELETE CASCADE,        -- 标签ID
-    PRIMARY KEY (hanime_id, tag_id)                          -- 联合主键，确保一部里番不会贴上重复标签
-);
--- CREATE INDEX idx_hanime_tags_tag_id ON hanime_tags (tag_id); -- 为标签ID创建索引，加速“查找某标签下的所有里番”操作
+-- 创建索引
+CREATE INDEX idx_anime_translation_locale
+    ON anime_translation (locale_code);
+CREATE INDEX idx_anime_translation_translated_name
+    ON anime_translation
+    USING pgroonga (translated_name)
+    WITH (tokenizer='TokenMecab');
+CREATE INDEX idx_anime_translation_translated_overview
+    ON anime_translation
+    USING pgroonga (translated_overview);
+CREATE INDEX idx_anime_translation_all
+    ON anime_translation
+    USING pgroonga (translated_name, translated_overview);
 
-/*
-==================================================
-动漫-制作人员 (hanime_staff) 关联表
-==================================================
-*/
-DROP TABLE IF EXISTS hanime_staff CASCADE;
-CREATE TABLE hanime_staff (
-    id SERIAL PRIMARY KEY,
-    hanime_id INT REFERENCES hanimes(id) ON DELETE CASCADE,              -- 里番ID
-    staff_id INT REFERENCES staff(id) ON DELETE CASCADE,                 -- 制作人员ID
-    position_id INT REFERENCES positions(id) ON DELETE CASCADE,          -- 职位ID
-    UNIQUE (hanime_id, staff_id, position_id)                            -- 联合唯一约束，确保同一部里番中同一制作人员不会被分配重复职位
-);
--- CREATE INDEX idx_hanime_staff_staff_id ON hanime_staff (staff_id);       -- 为制作人员ID创建索引，加速“查询某人参与过的所有作品”操作
--- CREATE INDEX idx_hanime_staff_position_id ON hanime_staff (position_id); -- 为职位ID创建索引，加速“查询某职位的所有人员”操作
+-- 添加注释
+COMMENT ON COLUMN anime_translation.anime_id IS '动画ID';
+COMMENT ON COLUMN anime_translation.locale_code IS 'ISO 639-1 语言代码';
+COMMENT ON COLUMN anime_translation.translated_name IS '国际化名称';
+COMMENT ON COLUMN anime_translation.translated_overview IS '国际化概述';
 
-/*
-==================================================
-里番-角色-演员 (hanime_actor) 关联表
-==================================================
-*/
-DROP TABLE IF EXISTS hanime_actor CASCADE;
-CREATE TABLE hanime_actor (
-    id SERIAL PRIMARY KEY,
-    hanime_id INT REFERENCES hanimes(id) ON DELETE CASCADE,                -- 里番ID
-    character_id INT REFERENCES characters(id) ON DELETE CASCADE,          -- 角色ID
-    actor_id INT REFERENCES actors(id) ON DELETE CASCADE,                  -- 演员ID
-    UNIQUE(hanime_id, character_id, actor_id)                              -- 联合唯一约束，确保同一部里番中同一角色不会被同一演员重复出演
+/* ==============================
+            剧集表
+============================== */
+CREATE TABLE episode (
+  id             SERIAL PRIMARY KEY,
+  anime_id       INT REFERENCES anime(id),
+  original_name  TEXT NOT NULL,
+  product_code   TEXT UNIQUE,
+  air_date       DATE NOT NULL,
+  season_number  INT NOT NULL,
+  episode_number INT NOT NULL,
+  official_url   TEXT NOT NULL,
+  cover_url      TEXT,
+  poster_url     TEXT,
+  preview_urls   TEXT[],
+  duration       INT,
+  created_at     TIMESTAMP NOT NULL DEFAULT now(),
+  UNIQUE (anime_id, season_number, episode_number)
 );
--- CREATE INDEX idx_hanime_actor_character_id ON hanime_actor (character_id); -- 为角色ID创建索引，加速“查询某角色的所有出演者”操作
--- CREATE INDEX idx_hanime_actor_actor_id ON hanime_actor (actor_id);         -- 为演员ID创建索引，加速“查询某演员出演过的所有角色”操作
+
+-- 添加注释
+COMMENT ON COLUMN episode.id IS '剧集ID';
+COMMENT ON COLUMN episode.anime_id IS '动画ID';
+COMMENT ON COLUMN episode.original_name IS '原始剧集名称';
+COMMENT ON COLUMN episode.product_code IS '代号';
+COMMENT ON COLUMN episode.air_date IS '发布日期';
+COMMENT ON COLUMN episode.season_number IS '季号';
+COMMENT ON COLUMN episode.episode_number IS '集号';
+COMMENT ON COLUMN episode.official_url IS '官方网址';
+COMMENT ON COLUMN episode.cover_url IS '封面网址';
+COMMENT ON COLUMN episode.poster_url IS '海报网址';
+COMMENT ON COLUMN episode.preview_urls IS '预览图网址';
+COMMENT ON COLUMN episode.duration IS '时长';
+
+/* ==============================
+            剧集翻译表
+============================== */
+CREATE TABLE episode_translation (
+    episode_id  INT NOT NULL REFERENCES episode(id),
+    locale_code TEXT NOT NULL REFERENCES locale(code),
+    translated_name       TEXT,
+    translated_overview    TEXT,
+    PRIMARY KEY (episode_id, locale_code)
+);
+
+-- 创建索引
+CREATE INDEX idx_episode_translation_locale
+    ON episode_translation (locale_code);
+CREATE INDEX idx_episode_translation_alias
+    ON episode_translation
+    USING pgroonga (translated_name)
+    WITH (tokenizer='TokenMecab');
+CREATE INDEX idx_episode_translation_overview
+    ON episode_translation
+    USING pgroonga (translated_overview);
+CREATE INDEX idx_episode_translation_all
+    ON episode_translation
+    USING pgroonga (translated_name, translated_overview);
+
+-- 添加注释
+COMMENT ON COLUMN episode_translation.episode_id IS '剧集ID';
+COMMENT ON COLUMN episode_translation.locale_code IS 'ISO 639-1 语言代码';
+COMMENT ON COLUMN episode_translation.translated_name IS '国际化名称';
+COMMENT ON COLUMN episode_translation.translated_overview IS '国际化名称';
+
+/* ==============================
+            标签表
+============================== */
+CREATE TABLE tag (
+  id         SERIAL PRIMARY KEY,
+  name       TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMP NOT NULL DEFAULT now()
+);
+
+-- 添加注释
+COMMENT ON COLUMN tag.id IS '标签ID';
+COMMENT ON COLUMN tag.name IS '标签名称';
+COMMENT ON COLUMN tag.created_at IS '创建时间';
+
+/* ==============================
+            角色表
+============================== */
+CREATE TABLE character (
+  id         SERIAL PRIMARY KEY,
+  name       TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT now()
+);
+
+-- 添加注释
+COMMENT ON COLUMN character.id IS '角色ID';
+COMMENT ON COLUMN character.name IS '角色名称';
+COMMENT ON COLUMN character.created_at IS '创建时间';
+
+/* ==============================
+            人物表
+============================== */
+CREATE TABLE person (
+  id         SERIAL PRIMARY KEY,
+  name       TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT now()
+);
+
+-- 添加注释
+COMMENT ON COLUMN person.id IS '人物ID';
+COMMENT ON COLUMN person.name IS '人物名称';
+COMMENT ON COLUMN person.created_at IS '创建时间';
+
+/* ==============================
+            职位表
+============================== */
+CREATE TABLE position (
+  id         SERIAL PRIMARY KEY,
+  name       TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMP NOT NULL DEFAULT now()
+);
+
+-- 添加注释
+COMMENT ON COLUMN position.id IS '职位ID';
+COMMENT ON COLUMN position.name IS '职位名称';
+COMMENT ON COLUMN position.created_at IS '创建时间';
+
+/* ==============================
+        剧集标签关联表
+============================== */
+CREATE TABLE episode_tag (
+  episode_id INT REFERENCES episode(id),
+  tag_id     INT REFERENCES tag(id),
+  PRIMARY KEY (episode_id, tag_id)
+);
+
+-- 添加注释
+COMMENT ON COLUMN episode_tag.episode_id IS '剧集ID';
+COMMENT ON COLUMN episode_tag.tag_id IS '标签ID';
+
+/* ==============================
+        动画角色关联表
+============================== */
+CREATE TABLE anime_character (
+  anime_id     INT REFERENCES anime(id),
+  character_id INT REFERENCES character(id),
+  person_id    INT REFERENCES person(id),
+  PRIMARY KEY (anime_id, character_id, person_id)
+);
+
+-- 添加注释
+COMMENT ON COLUMN anime_character.anime_id IS '动画ID';
+COMMENT ON COLUMN anime_character.character_id IS '角色ID';
+COMMENT ON COLUMN anime_character.person_id IS '人物ID';
+
+/* ==============================
+        动画职员关联表
+============================== */
+CREATE TABLE anime_staff (
+  anime_id    INT REFERENCES anime(id),
+  person_id   INT REFERENCES person(id),
+  position_id INT REFERENCES position(id),
+  PRIMARY KEY (anime_id, person_id, position_id)
+);
+
+-- 添加注释
+COMMENT ON COLUMN anime_staff.anime_id IS '动画ID';
+COMMENT ON COLUMN anime_staff.person_id IS '人物ID';
+COMMENT ON COLUMN anime_staff.position_id IS '职位ID';
